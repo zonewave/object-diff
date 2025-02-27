@@ -1,0 +1,3 @@
+rootProject.name = 'object-diff'
+
+include "object-diff-core"
