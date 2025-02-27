@@ -1,0 +1,9 @@
+plugins {
+    id 'java-library'
+}
+
+
+dependencies {
+    implementation project(':object-diff-core')
+    annotationProcessor project(':object-diff-core')
+}
