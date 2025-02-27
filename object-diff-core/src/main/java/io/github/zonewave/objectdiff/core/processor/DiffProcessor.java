@@ -42,21 +42,21 @@ public class DiffProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(Diff.class)) {
+        for (var element : roundEnv.getElementsAnnotatedWith(Diff.class)) {
             if (!isSupportAnnotations(element)) {
                 processingEnv.getMessager().printError("not in abstract class or interface");
                 return false;
             }
 
-            PackageElement packageElement = processingEnv.getElementUtils().getPackageOf(element);
-            String packageName = packageElement.getQualifiedName().toString();
-            String className = element.getSimpleName() + ImplSuffix;
+            var packageElement = processingEnv.getElementUtils().getPackageOf(element);
+            var packageName = packageElement.getQualifiedName().toString();
+            var className = element.getSimpleName() + ImplSuffix;
 
             // create class builder
-            TypeSpec.Builder diffClassBuilder = TypeSpec.classBuilder(className).addSuperinterface(element.asType())
+            var diffClassBuilder = TypeSpec.classBuilder(className).addSuperinterface(element.asType())
                     .addModifiers(Modifier.PUBLIC);
 
-            for (Element enclosedElement : element.getEnclosedElements()) {
+            for (var enclosedElement : element.getEnclosedElements()) {
                 if (enclosedElement.getKind() == ElementKind.METHOD) {
                     var methodName = enclosedElement.getSimpleName().toString();
                     var executableElement = (ExecutableElement) enclosedElement;
@@ -71,9 +71,9 @@ public class DiffProcessor extends AbstractProcessor {
             }
 
             // create class
-            TypeSpec diffClass = diffClassBuilder.build();
+            var diffClass = diffClassBuilder.build();
             // create file
-            JavaFile javaFile = JavaFile.builder(packageName, diffClass).build();
+            var javaFile = JavaFile.builder(packageName, diffClass).build();
 
             try {
                 javaFile.writeTo(processingEnv.getFiler());
